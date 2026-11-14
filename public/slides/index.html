@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Créditos ChatGPT · ¿Humano o IA?</title>
+<meta name="description" content="Presentación: créditos de ChatGPT directo al correo, con el reto ¿Humano o IA?">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Inter:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root {
+  --ink: #0B0B10; --ink-2: #13131A; --panel: #17171F; --line: #2A2A36;
+  --text: #F2F2F6; --muted: #A9A9B6; --green: #10A37F; --green-soft: #5FD3B0;
+  --violet: #9C84FF; --red: #F2716E; --gray: #8A8A96; --amber: #FFC477;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #050507; overflow: hidden; }
+body { font-family: 'Inter', Arial, sans-serif; color: var(--text); -webkit-font-smoothing: antialiased; }
+
+#stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 0 0; }
+.slide { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--ink);
+  padding: 128px 128px 160px; display: none; flex-direction: column; gap: 40px; }
+.slide.active { display: flex; }
+.slide.alt { background: var(--ink-2); }
+.slide p, .slide h1, .slide h2, .slide h3, .slide ul, .slide ol { margin: 0; }
+.slide ul, .slide ol { padding-left: 1.2em; }
+
+h1, h2, h3 { font-family: 'Space Grotesk', Arial, sans-serif; color: var(--text); letter-spacing: -2px; }
+h1 { font-size: 132px; line-height: 1.02; font-weight: 700; }
+h2 { font-size: 72px; line-height: 1.08; font-weight: 700; }
+h3 { font-size: 40px; line-height: 1.15; font-weight: 600; letter-spacing: -0.5px; }
+.eyebrow { font-size: 24px; font-weight: 600; letter-spacing: 5px; text-transform: uppercase; color: var(--green-soft); }
+.lead { font-size: 36px; line-height: 1.45; color: var(--muted); max-width: 1180px; }
+.body { font-size: 28px; line-height: 1.45; color: var(--muted); }
+.body b { color: var(--text); }
+.acc { color: var(--green-soft); } .acc2 { color: var(--violet); }
+
+.glow { position: absolute; border-radius: 50%; pointer-events: none; }
+.g1 { left: -240px; top: -260px; width: 1100px; height: 900px; background: radial-gradient(closest-side, rgba(16,163,127,.38), rgba(16,163,127,0)); }
+.g2 { left: 1180px; top: 380px; width: 1000px; height: 900px; background: radial-gradient(closest-side, rgba(124,92,255,.32), rgba(124,92,255,0)); }
+.foot { position: absolute; left: 128px; bottom: 64px; width: 1664px; display: flex; justify-content: space-between; }
+.foot p { font-size: 24px; color: var(--gray); }
+
+.row { display: flex; gap: 32px; } .col { display: flex; flex-direction: column; gap: 24px; } .grow { flex: 1; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 28px; padding: 44px; display: flex; flex-direction: column; gap: 18px; }
+.ico { width: 56px; height: 56px; color: var(--green-soft); flex: none; } .ico.v { color: var(--violet); } .ico.a { color: var(--amber); }
+.step { background: var(--panel); border: 1px solid var(--line); border-radius: 28px; padding: 40px 36px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
+.step .n { font-family: 'JetBrains Mono', monospace; font-size: 28px; color: var(--green-soft); }
+.step.hi { border: 2px solid var(--green); }
+.arrow { width: 56px; align-self: center; color: var(--gray); flex: none; }
+.pills { display: flex; flex-wrap: wrap; gap: 16px; }
+.pill { font-size: 28px; padding: 12px 24px; border-radius: 999px; background: var(--panel); border: 1px solid var(--line); }
+.pill.ok { border-color: var(--green); color: var(--green-soft); }
+.shot { border-radius: 24px; border: 1px solid var(--line); box-shadow: 0 40px 80px rgba(0,0,0,.55); object-fit: cover; object-position: top; display: block; }
+.big { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 120px; font-weight: 700; line-height: 1; letter-spacing: -4px; color: var(--green-soft); }
+.big.v { color: var(--violet); } .big.g { color: var(--amber); }
+.mail { background: #15151C; border: 1px solid var(--line); border-radius: 28px; padding: 48px; display: flex; flex-direction: column; gap: 22px; width: 820px; flex: none; }
+.mail .hello { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 48px; font-weight: 700; }
+.code { font-family: 'JetBrains Mono', monospace; font-size: 36px; letter-spacing: 2px; text-align: center; background: #0F1A17; border: 2px dashed var(--green); border-radius: 18px; padding: 22px; }
+.btn { align-self: flex-start; font-size: 28px; font-weight: 600; color: #0B0B10; background: var(--green-soft); border-radius: 999px; padding: 18px 34px; }
+.btn.ghost { color: #D9D0FF; background: var(--ink); border: 2px solid var(--violet); }
+.status { display: flex; align-items: center; gap: 20px; }
+.sq { width: 28px; height: 28px; border-radius: 8px; flex: none; }
+.sq.s { background: var(--green); } .sq.f { background: var(--red); } .sq.l { background: var(--gray); }
+.note { font-size: 26px; line-height: 1.45; color: var(--muted); border-left: 4px solid var(--violet); padding-left: 24px; }
+.statement { background: var(--green) !important; }
+.statement h1 { color: var(--ink); font-size: 150px; letter-spacing: -6px; }
+.statement .lead, .statement .eyebrow { color: #0B2A22; }
+.video-frame { position: relative; flex: none; }
+.video-frame video { width: 1240px; height: 698px; border-radius: 24px; border: 1px solid var(--line); box-shadow: 0 40px 80px rgba(0,0,0,.55); display: block; background: #000; object-fit: cover; }
+.video-badge { position: absolute; left: 24px; top: 24px; font-size: 22px; font-weight: 600; background: rgba(11,11,16,.8); border: 1px solid var(--green); color: var(--text); padding: 8px 18px; border-radius: 999px; }
+
+.active .rise { animation: rise 700ms cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i, 0) * 120ms); }
+.active .fade { animation: fadein 900ms ease-out both; animation-delay: calc(var(--i, 0) * 120ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(32px); } }
+@keyframes fadein { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .active .rise, .active .fade { animation: none; } }
+
+/* Chrome */
+#bar { position: fixed; left: 0; bottom: 0; height: 4px; background: linear-gradient(90deg, #10A37F, #9C84FF); transition: width .4s; z-index: 10; }
+#hud { position: fixed; right: 16px; top: 14px; display: flex; gap: 8px; align-items: center; z-index: 10; opacity: .35; transition: opacity .3s; font: 600 14px Inter, sans-serif; }
+#hud:hover, body.touch #hud { opacity: 1; }
+#hud button { border: 1px solid #2A2A36; background: rgba(23,23,31,.9); color: #F2F2F6; border-radius: 999px; padding: 8px 14px; cursor: pointer; font: inherit; }
+#count { color: #A9A9B6; min-width: 54px; text-align: center; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+<section class="slide" style="justify-content:center; padding:128px;">
+  <div class="glow g1 fade"></div><div class="glow g2 fade" style="--i:2"></div>
+  <p class="eyebrow rise">OpenAI Event</p>
+  <h1 class="rise" style="--i:1">Créditos de <span class="acc">ChatGPT</span>,<br>directo al correo.</h1>
+  <p class="lead rise" style="--i:2">Dos CSV, un clic y un reporte. Y de regalo para cada asistente: el reto “¿Humano o IA?”.</p>
+  <p class="body rise" style="--i:3">[Nombre del presentador] · [Fecha]</p>
+</section>
+
+<section class="slide alt">
+  <p class="eyebrow">El problema</p>
+  <h2 class="rise">Repartir créditos a mano no escala.</h2>
+  <div class="row grow" style="align-items:stretch;">
+    <div class="card grow rise" style="--i:1"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><h3>Copiar y pegar</h3><p class="body">Un código por persona, uno por uno, por correo o por WhatsApp.</p></div>
+    <div class="card grow rise" style="--i:2"><svg class="ico a" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/></svg><h3>Errores</h3><p class="body">Códigos repetidos, personas olvidadas, correos mal escritos.</p></div>
+    <div class="card grow rise" style="--i:3"><svg class="ico v" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><h3>Sin registro</h3><p class="body">Al final nadie sabe qué créditos se entregaron y cuáles sobraron.</p></div>
+  </div>
+  <div class="foot"><p>OpenAI Event · Créditos de ChatGPT</p><p>02</p></div>
+</section>
+
+<section class="slide">
+  <p class="eyebrow">Cómo funciona</p>
+  <h2 class="rise">Cuatro pasos, un solo flujo.</h2>
+  <div class="row grow" style="align-items:stretch; gap:16px;">
+    <div class="step rise" style="--i:1"><p class="n">01</p><h3>Sube los 2 CSV</h3><p class="body">Usuarios y créditos, arrastrando los archivos.</p></div>
+    <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M14 7l5 5-5 5"/></svg>
+    <div class="step rise" style="--i:2"><p class="n">02</p><h3>Confirma los campos</h3><p class="body">Correo, nombre y crédito se detectan solos.</p></div>
+    <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M14 7l5 5-5 5"/></svg>
+    <div class="step rise" style="--i:3"><p class="n">03</p><h3>Envía</h3><p class="body">Un correo por persona vía Resend, en lotes de 100.</p></div>
+    <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M14 7l5 5-5 5"/></svg>
+    <div class="step hi rise" style="--i:4"><p class="n">04</p><h3>Reporte</h3><p class="body">Se descarga solo: qué crédito tiene cada quien.</p></div>
+  </div>
+  <div class="foot"><p>OpenAI Event · Créditos de ChatGPT</p><p>03</p></div>
+</section>
+
+<section class="slide alt" style="flex-direction:row; gap:56px; align-items:center;">
+  <div class="glow g2 fade"></div>
+  <div class="col" style="width:368px; gap:32px; flex:none;">
+    <p class="eyebrow">Demo</p>
+    <h2 class="rise" style="font-size:64px;">Mírala en acción.</h2>
+    <p class="body rise" style="--i:1">Del CSV al correo y al juego, en 30 segundos.</p>
+    <ol class="body rise" style="--i:2; display:flex; flex-direction:column; gap:10px;">
+      <li>Subir los CSV</li><li>Enviar</li><li>Recibir el correo</li><li>Jugar</li>
+    </ol>
+  </div>
+  <div class="video-frame fade" style="--i:1">
+    <video id="demo" src="/slides/assets/demo.mp4" poster="/slides/assets/demo-still.webp" muted loop playsinline preload="auto" aria-label="Video de la herramienta: subir los CSV, enviar, ver el correo con el crédito y jugar ¿Humano o IA?"></video>
+    <span class="video-badge">▶ Demo · 30 s</span>
+  </div>
+  <div class="foot"><p>OpenAI Event · Créditos de ChatGPT</p><p>04</p></div>
+</section>
+
+<section class="slide alt" style="flex-direction:row; gap:72px; align-items:center;">
+  <div class="col grow" style="gap:36px;">
+    <p class="eyebrow">Detección de campos</p>
+    <h2 class="rise">Lee el CSV como venga.</h2>
+    <p class="body rise" style="--i:1">No importa cómo se llame la columna: la herramienta la reconoce, y si se equivoca, la corriges con un clic.</p>
+    <div class="pills rise" style="--i:2">
+      <p class="pill">email</p><p class="pill">Correo electrónico</p><p class="pill">Correo participante</p><p class="pill">Nombres + Apellidos</p><p class="pill">Nombre del participante</p><p class="pill ok">Código ChatGPT</p><p class="pill ok">link</p>
+    </div>
+  </div>
+  <img class="shot fade" style="--i:2; width:760px; height:792px; flex:none;" src="/slides/assets/setup.webp" alt="Pantalla con los dos CSV cargados, los campos detectados y la asignación de créditos">
+  <div class="foot"><p>OpenAI Event · Créditos de ChatGPT</p><p>05</p></div>
+</section>
+
+<section class="slide">
+  <p class="eyebrow">Asignación</p>
+  <h2 class="rise">Un crédito, una persona.</h2>
+  <div class="row grow" style="align-items:stretch;">
+    <div class="card grow rise" style="--i:1"><p class="big">1 : 1</p><h3>En orden</h3><p class="body">Cada persona recibe el siguiente crédito del archivo. Correos repetidos o inválidos se descartan.</p></div>
+    <div class="card grow rise" style="--i:2"><p class="big g">Faltan</p><h3>Usuarios pendientes</h3><p class="body">Si hay más personas que créditos, las que sobran quedan en una lista para el próximo envío.</p></div>
+    <div class="card grow rise" style="--i:3"><p class="big v">Sobran</p><h3>Créditos libres</h3><p class="body">Si hay más créditos que personas, los que sobran quedan libres y se pueden reutilizar.</p></div>
+  </div>
+  <div class="foot"><p>OpenAI Event · Créditos de ChatGPT</p><p>06</p></div>
+</section>
+
+<section class="slide alt" style="flex-direction:row; gap:96px; align-items:center;">
+  <div class="glow g1 fade"></div>
+  <div class="mail rise">
+    <p class="eyebrow">OpenAI Event</p>
+    <p class="hello">Hola, Ana 👋</p>
+    <p class="body">Gracias por ser parte del evento. Aquí tienes tus créditos de ChatGPT:</p>
+    <p class="code">CHATGPT-7KQ2-ALPHA</p>
+    <p class="btn">Canjear mis créditos →</p>
+    <p class="btn ghost">Aceptar el reto 🤖🧑</p>
+  </div>
+  <div class="col grow" style="gap:36px;">
+    <p class="eyebrow">Lo que recibe el asistente</p>
+    <h2 class="rise" style="--i:1">Su crédito y un reto, en un solo correo.</h2>
+    <ul class="body rise" style="--i:2; display:flex; flex-direction:column; gap:16px;">
+      <li>Su código personal, listo para copiar</li><li>Un botón para canjearlo</li><li>Un enlace al juego con su nombre</li>
+    </ul>
+  </div>
+  <div class="foot"><p>OpenAI Event · Créditos de ChatGPT</p><p>07</p></div>
+</section>
+
+<section class="slide" style="flex-direction:row; gap:72px; align-items:center;">
+  <div class="glow g2 fade"></div>
+  <div class="col" style="width:720px; gap:36px; flex:none;">
+    <p class="eyebrow">El reto</p>
+    <h2 class="rise">¿Humano <span class="acc2">o IA?</span></h2>
+    <p class="body rise" style="--i:1">Diez textos. Algunos los escribieron grandes autores; otros, una inteligencia artificial. ¿Notas la diferencia?</p>
+    <div class="col rise" style="--i:2; gap:20px;">
+      <div class="status"><svg class="ico" style="width:44px;height:44px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2 2 2 0 0 0 2 2h14"/></svg><p class="body"><b>10 rondas</b> · 5 de autores clásicos, 5 de IA</p></div>
+      <div class="status"><svg class="ico" style="width:44px;height:44px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><p class="body"><b>15 s por ronda</b> · más rápido, más puntos</p></div>
+      <div class="status"><svg class="ico a" style="width:44px;height:44px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg><p class="body"><b>Rachas</b> · multiplican x1.5, x2 y x3</p></div>
+    </div>
+  </div>
+  <img class="shot fade" style="--i:2; width:872px; height:785px; flex:none;" src="/slides/assets/round.webp" alt="Una ronda del juego: el texto revelado como generado por IA, con el puntaje sumado">
+  <div class="foot"><p>OpenAI Event · Créditos de ChatGPT</p><p>08</p></div>
+</section>
+
+<section class="slide alt" style="flex-direction:row; gap:72px; align-items:center;">
+  <div class="col" style="width:680px; gap:32px; flex:none;">
+    <p class="eyebrow">El reporte</p>
+    <h2 class="rise">Siempre sabes qué pasó con cada crédito.</h2>
+    <div class="col rise" style="--i:1; gap:20px;">
+      <div class="status"><div class="sq s"></div><p class="body"><b>Enviado</b> · llegó a su dueño</p></div>
+      <div class="status"><div class="sq f"></div><p class="body"><b>Fallido</b> · se puede reintentar</p></div>
+      <div class="status"><div class="sq l"></div><p class="body"><b>Libre</b> · listo para otro envío</p></div>
+    </div>
+    <p class="note rise" style="--i:2">El reporte es un CSV: súbelo cuando quieras para verlo en gráfico y descargar los pendientes.</p>
+  </div>
+  <img class="shot fade" style="--i:2; width:912px; height:792px; flex:none;" src="/slides/assets/report.webp" alt="Vista del reporte: totales por estado, barra de uso, filtros y tabla de créditos">
+  <div class="foot"><p>OpenAI Event · Créditos de ChatGPT</p><p>09</p></div>
+</section>
+
+<section class="slide">
+  <p class="eyebrow">Antes del gran envío</p>
+  <h2 class="rise">Cuatro cosas a tener en cuenta.</h2>
+  <div class="grow" style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+    <div class="card rise" style="--i:1; padding:36px 44px;"><h3>Límite de Resend</h3><p class="body">El plan gratis envía 100 correos al día. Para más, plan pagado o envíos por tandas.</p></div>
+    <div class="card rise" style="--i:2; padding:36px 44px;"><h3>Dominio verificado</h3><p class="body">El dominio del remitente tiene que estar verificado en Resend o los correos se rechazan.</p></div>
+    <div class="card rise" style="--i:3; padding:36px 44px;"><h3>Remitente honesto</h3><p class="body">Si el evento no es oficial de OpenAI, no usar su nombre como remitente: termina en spam.</p></div>
+    <div class="card rise" style="--i:4; padding:36px 44px;"><h3>Guarda el reporte</h3><p class="body">No hay base de datos: el CSV del reporte es el único registro de quién recibió qué.</p></div>
+  </div>
+  <div class="foot"><p>OpenAI Event · Créditos de ChatGPT</p><p>10</p></div>
+</section>
+
+<section class="slide statement" style="flex-direction:row; align-items:center; gap:96px; padding:128px;">
+  <div class="col grow" style="gap:32px;">
+    <p class="eyebrow rise">Gracias</p>
+    <h1 class="rise" style="--i:1">¿Humano o IA?</h1>
+    <p class="lead rise" style="--i:2">Revisa tu correo: tu crédito y tu reto ya te están esperando.</p>
+    <p class="lead rise" style="--i:3; font-size:32px;">openai-event-creditos.vercel.app</p>
+  </div>
+  <div class="rise" style="--i:2; background:#F6F6F2; border-radius:36px; padding:32px; display:flex; flex-direction:column; align-items:center; gap:16px; box-shadow:0 40px 80px rgba(0,0,0,.25); flex:none;">
+    <img src="/slides/assets/qr.png" alt="Código QR que abre openai-event-creditos.vercel.app" style="width:520px; height:520px; display:block;">
+    <p style="font-size:28px; font-weight:600; color:#0B0B10;">Escanea para abrir la app</p>
+  </div>
+</section>
+
+</div>
+
+<div id="bar"></div>
+<div id="hud">
+  <button id="prev" aria-label="Anterior">←</button>
+  <span id="count"></span>
+  <button id="next" aria-label="Siguiente">→</button>
+  <button id="fs" aria-label="Pantalla completa">⛶</button>
+</div>
+
+<script>
+(() => {
+  const stage = document.getElementById("stage");
+  const slides = [...document.querySelectorAll(".slide")];
+  const video = document.getElementById("demo");
+  let index = 0;
+
+  function fit() {
+    const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+    stage.style.transform = `scale(${s}) translate(-50%, -50%)`;
+  }
+
+  function show(i) {
+    index = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((el, n) => el.classList.toggle("active", n === index));
+    document.getElementById("count").textContent = `${index + 1} / ${slides.length}`;
+    document.getElementById("bar").style.width = `${((index + 1) / slides.length) * 100}%`;
+    history.replaceState(null, "", `#${index + 1}`);
+    const onVideo = slides[index].contains(video);
+    if (onVideo) { video.currentTime = 0; video.play().catch(() => {}); } else video.pause();
+  }
+
+  const next = () => show(index + 1);
+  const prev = () => show(index - 1);
+
+  addEventListener("keydown", (e) => {
+    if (["ArrowRight", "PageDown", " ", "Enter"].includes(e.key)) { e.preventDefault(); next(); }
+    else if (["ArrowLeft", "PageUp", "Backspace"].includes(e.key)) { e.preventDefault(); prev(); }
+    else if (e.key === "Home") show(0);
+    else if (e.key === "End") show(slides.length - 1);
+    else if (e.key.toLowerCase() === "f") toggleFs();
+  });
+
+  function toggleFs() {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen?.().catch(() => {});
+  }
+
+  document.getElementById("next").onclick = (e) => { e.stopPropagation(); next(); };
+  document.getElementById("prev").onclick = (e) => { e.stopPropagation(); prev(); };
+  document.getElementById("fs").onclick = (e) => { e.stopPropagation(); toggleFs(); };
+
+  addEventListener("click", (e) => {
+    if (e.target.closest("#hud")) return;
+    (e.clientX < innerWidth * 0.3 ? prev : next)();
+  });
+
+  let startX = null;
+  addEventListener("touchstart", (e) => { document.body.classList.add("touch"); startX = e.touches[0].clientX; }, { passive: true });
+  addEventListener("touchend", (e) => {
+    if (startX === null) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 40) (dx < 0 ? next : prev)();
+    startX = null;
+  });
+
+  addEventListener("resize", fit);
+  fit();
+  show((parseInt(location.hash.slice(1), 10) || 1) - 1);
+})();
+</script>
+</body>
+</html>
