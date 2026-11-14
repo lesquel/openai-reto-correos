@@ -108,7 +108,7 @@ export default function AdminPage() {
 
   return (
     <main className="shell wide">
-      <span className="eyebrow"><span className="dot" /> OpenAI Event</span>
+      <span className="eyebrow"><span className="dot" /> Dev Day · The Builders AI Ecuador</span>
       <h1 className="title">Créditos de <span className="shine">ChatGPT</span>,<br />directo al correo.</h1>
       <p className="lead">
         Sube el CSV de asistentes y el CSV de créditos. A cada persona le llega un enlace para armar el QR de su crédito.

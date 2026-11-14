@@ -20,7 +20,7 @@ export function renderHtml(name: string, link: string): string {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
 <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#FFFFFF;border:3px solid #1A1F36;border-radius:22px">
 <tr><td style="padding:36px 32px">
-<p style="margin:0 0 20px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#D9480F;font-weight:800">OpenAI Event · Créditos de ChatGPT</p>
+<p style="margin:0 0 20px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#D9480F;font-weight:800">Dev Day · The Builders AI Ecuador</p>
 <h1 style="margin:0 0 14px;font-size:30px;line-height:34px;font-weight:800;letter-spacing:-.03em">${n}, los builders no reciben premios: <span style="color:#D9480F">los construyen.</span></h1>
 <p style="margin:0 0 24px;font-size:16px;line-height:25px;color:#5B6384">Tus créditos de ChatGPT vienen dentro de un código QR partido en 16 bloques. Atrápalos todos con la caja, esquiva los bugs y, cuando el QR esté completo, reclama tus créditos.</p>
 <a href="${escapeHtml(link)}" style="display:inline-block;background:#D9480F;color:#FFFFFF;text-decoration:none;font-weight:800;font-size:18px;padding:15px 32px;border-radius:999px">Construir mi QR</a>
