@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reto QR · Ruray</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<style>
+  /* Ruray brand tokens: ice, ink, terracotta. */
+  :root { --ice: #E3EEFF; --ice-deep: #CADBFB; --ink: #1A1F36; --tc: #D9480F; --white: #FFFFFF; --muted: #5B6384; }
+  * { box-sizing: border-box; margin: 0; }
+  body { min-height: 100vh; background: var(--ice); color: var(--ink); font: 500 17px/1.45 "Plus Jakarta Sans", system-ui, sans-serif;
+         display: flex; justify-content: center; padding: 18px 16px 36px; }
+  main { width: 100%; max-width: 460px; }
+  main.landing { max-width: 1040px; }
+  .badge { display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; background: var(--ink); color: var(--white); padding: 7px 14px; border-radius: 999px; margin-top: 18px; }
+  .hero { display: grid; gap: 8px; align-items: center; }
+  .hero .art { max-width: 420px; order: -1; }
+  .sec { font-size: 26px; font-weight: 800; letter-spacing: -.03em; margin-top: 44px; }
+  .rules.three small { display: block; font-weight: 600; font-size: 14px; color: var(--muted); }
+  .band { margin-top: 44px; padding: 30px 26px; background: var(--ink); color: var(--white); border-radius: 26px; }
+  .band h2 { font-size: 28px; font-weight: 800; letter-spacing: -.03em; line-height: 1.1; }
+  .band em { font-style: normal; color: var(--tc); }
+  .band p { margin-top: 12px; opacity: .8; }
+  @media (min-width: 860px) {
+    main.landing { padding-top: 10px; }
+    .hero { grid-template-columns: 1.05fr 1fr; gap: 40px; margin-top: 30px; }
+    .hero .art { max-width: 100%; order: 0; }
+    main.landing h1 { font-size: 60px; }
+    main.landing .lead { font-size: 20px; max-width: 34em; }
+    .rules.three { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .rules.three li { align-items: flex-start; padding: 18px; border-radius: 20px; }
+    .band { padding: 48px; }
+    .band h2 { font-size: 40px; max-width: 18em; }
+  }
+  .wm { font-weight: 800; font-size: 26px; letter-spacing: -.04em; display: inline-flex; align-items: flex-end; }
+  .wm i { width: 8px; height: 8px; border-radius: 50%; background: var(--tc); margin: 0 0 6px 3px; }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .top small { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--tc); }
+  .art { display: block; width: 100%; max-width: 330px; margin: 10px auto 0; }
+  h1 { font-size: 34px; font-weight: 800; line-height: 1.04; letter-spacing: -.04em; margin-top: 14px; }
+  h1 em { font-style: normal; color: var(--tc); }
+  .lead { color: var(--muted); margin-top: 10px; }
+  .rules { list-style: none; padding: 0; margin-top: 14px; display: grid; gap: 8px; }
+  .rules li { display: flex; align-items: center; gap: 12px; background: var(--white); border-radius: 16px; padding: 10px 14px; font-weight: 700; font-size: 15px; }
+  .rules b { flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--ink); color: var(--white); display: grid; place-items: center; font-size: 15px; }
+  .rules li.bad b { background: var(--tc); }
+
+  .hud { display: flex; align-items: center; gap: 14px; margin-top: 14px; }
+  /* The board shows the QR pieces caught so far; it grows to full width when complete. */
+  .board { flex: none; width: 150px; display: grid; gap: 2px; padding: 6px; background: var(--white); border: 3px solid var(--ink); border-radius: 16px; aspect-ratio: 1; }
+  .cell { background-color: var(--ice); background-repeat: no-repeat; border-radius: 3px; image-rendering: pixelated; }
+  .cell.got { background-color: var(--white); animation: pop .35s cubic-bezier(.2, .8, .2, 1); }
+  .cell:not(.got) { background-image: none !important; }
+  @keyframes pop { from { transform: scale(.3); } 60% { transform: scale(1.15); } }
+  .hud.win { display: block; }
+  .hud.win .board { width: 100%; gap: 0; padding: 14px; border-radius: 22px; }
+  .hud.win .cell { border-radius: 0; animation: none; }
+  .hud.win .stats { display: none; }
+  .stats { flex: 1; display: grid; gap: 6px; font-size: 14px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .stats b { display: block; font-size: 26px; font-weight: 800; letter-spacing: -.03em; color: var(--ink); line-height: 1.05; }
+
+  .field { position: relative; margin-top: 12px; height: min(48vh, 400px); background: var(--white); border: 3px solid var(--ink); border-radius: 22px; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; }
+  .field canvas { display: block; width: 100%; height: 100%; }
+  .field.hit { animation: shake .3s; }
+  @keyframes shake { 25% { transform: translateX(-7px); } 50% { transform: translateX(6px); } 75% { transform: translateX(-3px); } }
+  .toast { position: absolute; left: 0; right: 0; top: 12px; text-align: center; font-size: 14px; font-weight: 800; color: var(--tc); pointer-events: none; opacity: 0; transition: opacity .2s; }
+  .toast.on { opacity: 1; }
+
+  .card { margin-top: 16px; padding: 18px; background: var(--white); border: 3px solid var(--ink); border-radius: 22px; }
+  .card h2 { font-size: 22px; font-weight: 800; letter-spacing: -.03em; line-height: 1.1; }
+  label { display: block; font-size: 14px; font-weight: 700; margin-top: 14px; }
+  input, textarea, select { width: 100%; margin-top: 6px; padding: 13px 14px; background: var(--ice); color: var(--ink); border: 2px solid var(--ink); border-radius: 14px; font: 600 16px inherit; font-family: inherit; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .btn { appearance: none; border: 2px solid var(--ink); background: var(--white); color: var(--ink); font: 800 16px inherit; font-family: inherit; letter-spacing: -.01em;
+         padding: 13px 22px; border-radius: 999px; cursor: pointer; text-decoration: none; }
+  .btn.main { background: var(--tc); border-color: var(--tc); color: var(--white); }
+  .btn.big { font-size: 20px; padding: 16px 34px; }
+  .btn.small { font-size: 14px; padding: 9px 14px; }
+  .msg { font-size: 14px; font-weight: 700; color: var(--tc); margin-top: 10px; min-height: 1.4em; }
+  .code { margin-top: 12px; padding: 12px; background: var(--ice); border-radius: 12px; font: 700 15px ui-monospace, Menlo, monospace; word-break: break-all; }
+  .hint { color: var(--muted); font-size: 14px; margin-top: 6px; }
+  footer { margin-top: 24px; padding-top: 16px; border-top: 2px solid var(--ice-deep); font-size: 13px; color: var(--muted); }
+  footer b { color: var(--ink); }
+  footer p { margin-top: 8px; }
+  .made { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: 999px; background: var(--ink); color: var(--white); }
+  .made span:first-child { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; opacity: .75; }
+  .made .wm { font-size: 24px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <div class="top"><span class="wm">ruray<i></i></span><small>Dev Day · The Builders</small></div>
+
+  <!-- Intro: shown when the link carries a reward. -->
+  <section id="intro" hidden>
+    <img class="art" src="/reto/art/build.png" alt="" onerror="this.src='/reto/art/hero.png'">
+    <h1 id="title">Builder, tu premio <em>se construye.</em></h1>
+    <p class="lead">Tu código QR viene en 16 bloques. Atrápalos todos con la caja y constrúyelo.</p>
+    <ul class="rules">
+      <li><b>+1</b>Atrapa cada bloque del QR</li>
+      <li class="bad"><b>−1</b>Esquiva los bugs: te tumban un bloque</li>
+    </ul>
+    <div class="row"><button class="btn main big" id="go">Jugar</button></div>
+  </section>
+
+  <!-- Game: board with the pieces caught, and the field where they fall. -->
+  <section id="game" hidden>
+    <img class="art" id="winArt" src="/reto/art/win.png" alt="" hidden>
+    <h1 id="winTitle" hidden>¡Obra terminada! <em>Este es tu código.</em></h1>
+    <div class="hud" id="hud">
+      <div class="board" id="board" aria-label="Código QR en construcción"></div>
+      <div class="stats"><span>Bloques<b id="count">0/16</b></span><span>Tiempo<b id="time">0:00</b></span></div>
+    </div>
+    <div class="field" id="field"><canvas id="canvas" aria-label="Zona de juego. Mueve la caja con el dedo, el ratón o las flechas."></canvas><div class="toast" id="toast"></div></div>
+    <p class="hint" id="how">Mueve la caja con el dedo, el ratón o las flechas.</p>
+    <div class="card" id="win" hidden>
+      <h2>Escanéalo o reclámalo aquí</h2>
+      <p class="hint" id="winStats"></p>
+      <div class="code" id="code"></div>
+      <div class="row"><a class="btn main" id="open" target="_blank" rel="noopener" hidden>Reclamar</a><button class="btn" id="copy">Copiar código</button><button class="btn" id="again">Jugar otra vez</button></div>
+    </div>
+  </section>
+
+  <!-- Landing: no reward in the link. Explains the idea and links to a demo. Emails are sent by the server (Resend). -->
+  <section id="create" hidden>
+    <div class="hero">
+      <div>
+        <span class="badge">Dev Day · The Builders AI Ecuador</span>
+        <h1>Los builders no reciben premios. <em>Los construyen.</em></h1>
+        <p class="lead">En vez de mandar un código por correo, manda una obra en construcción. Quien lo recibe atrapa los 16 bloques de su QR y recién ahí puede reclamar sus créditos.</p>
+        <div class="row"><a class="btn main big" id="demo" href="#">Jugar la demo</a></div>
+      </div>
+      <img class="art" src="/reto/art/build.png" alt="" onerror="this.src='/reto/art/hero.png'">
+    </div>
+
+    <h2 class="sec">Cómo funciona</h2>
+    <ul class="rules three">
+      <li><b>1</b><span>Llega un correo<small>Cada persona recibe su enlace personal.</small></span></li>
+      <li><b>2</b><span>Se construye el QR<small>Atrapas los 16 bloques y esquivas los bugs.</small></span></li>
+      <li><b>3</b><span>Se reclama el premio<small>El QR queda listo para escanear o abrir.</small></span></li>
+    </ul>
+
+    <div class="band">
+      <h2>Un código pegado en un correo se olvida. <em>Uno que construiste, no.</em></h2>
+      <p>Sin servidor ni registro: una sola página que corre en el navegador de cada persona.</p>
+    </div>
+
+  </section>
+
+  <footer>
+    <div class="made"><span>Built by</span><span class="wm">ruray<i></i></span></div>
+    <p><b>Ruray construye software, consultoría y capacitación para negocios.</b> Ecuador · Australia.</p>
+    <p>Reto hecho por Ruray para el Dev Day de la comunidad The Builders AI Ecuador. No es una página oficial de la comunidad.</p>
+    <p>Todo ocurre en tu navegador. El juego es la experiencia, no la seguridad: usa códigos de un solo uso.</p>
+  </footer>
+</main>
+
+<script>
+  // The reward travels in the URL fragment as base64url(JSON { c: code or URL, n: name }).
+  const $ = id => document.getElementById(id);
+  const GRID = 4, TOTAL = GRID * GRID;
+  const INK = "#1A1F36", TC = "#D9480F", ICE = "#E3EEFF", WHITE = "#FFFFFF";
+  const encode = obj => btoa(String.fromCharCode(...new TextEncoder().encode(JSON.stringify(obj)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  const decode = text => {
+    try {
+      const data = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(text.replace(/-/g, "+").replace(/_/g, "/")), ch => ch.charCodeAt(0))));
+      return data && typeof data.c === "string" && data.c ? data : null;
+    } catch { return null; }
+  };
+  const isUrl = text => /^https?:\/\//i.test(text);
+  const escapeHtml = text => text.replace(/[&<>"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
+  const copyText = async (text, button) => {
+    try { await navigator.clipboard.writeText(text); button.textContent = "Copiado"; }
+    catch { button.textContent = "Copia manualmente"; }
+  };
+
+  // Draw the QR on a canvas; pieces are cut from it.
+  function qrCanvas(text) {
+    const qr = qrcode(0, "M"); qr.addData(text); qr.make();
+    const count = qr.getModuleCount(), quiet = 2, cell = 8, side = (count + quiet * 2) * cell;
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = side;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = WHITE; ctx.fillRect(0, 0, side, side);
+    ctx.fillStyle = "#000000";
+    for (let r = 0; r < count; r++) for (let c = 0; c < count; c++) if (qr.isDark(r, c)) ctx.fillRect((c + quiet) * cell, (r + quiet) * cell, cell, cell);
+    return canvas;
+  }
+
+  // Tiny synthesized sounds; the audio context starts on the first tap.
+  let audio = null;
+  function beep(freq, dur, type = "sine", gain = .08, slide = 0) {
+    if (!audio) return;
+    const osc = audio.createOscillator(), amp = audio.createGain(), now = audio.currentTime;
+    osc.type = type; osc.frequency.setValueAtTime(freq, now);
+    if (slide) osc.frequency.exponentialRampToValueAtTime(freq * slide, now + dur);
+    amp.gain.setValueAtTime(gain, now); amp.gain.exponentialRampToValueAtTime(.0001, now + dur);
+    osc.connect(amp).connect(audio.destination); osc.start(now); osc.stop(now + dur);
+  }
+
+  function startGame(data) {
+    const qr = qrCanvas(data.c), image = qr.toDataURL("image/png"), slice = qr.width / GRID;
+    const board = $("board"), field = $("field"), canvas = $("canvas"), ctx = canvas.getContext("2d");
+    if (data.n) $("title").innerHTML = `${escapeHtml(data.n)}, tu premio <em>se construye.</em>`;
+
+    board.style.gridTemplateColumns = `repeat(${GRID}, 1fr)`;
+    const cells = Array.from({ length: TOTAL }, (_, i) => {
+      const el = document.createElement("div"); el.className = "cell";
+      el.style.backgroundImage = `url(${image})`;
+      el.style.backgroundSize = `${GRID * 100}% ${GRID * 100}%`;
+      el.style.backgroundPosition = `${(i % GRID) * 100 / (GRID - 1)}% ${Math.floor(i / GRID) * 100 / (GRID - 1)}%`;
+      board.append(el); return el;
+    });
+
+    // Game state. Sizes are in CSS pixels; the canvas is scaled for sharp screens.
+    const PIECE = 46, BOX_W = 96, BOX_H = 50;
+    let width = 0, height = 0, got, items, floats, player, running = false, elapsed = 0, spawnIn = 0, bugsHit = 0, last = 0, toastTimer = 0;
+    // Read-only view of the game, used by automated tests.
+    window.reto = { get items() { return items; }, get player() { return player; }, get running() { return running; } };
+
+    function resize() {
+      const ratio = window.devicePixelRatio || 1;
+      width = field.clientWidth; height = field.clientHeight;
+      canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      if (player) player.x = Math.min(Math.max(player.x, BOX_W / 2), width - BOX_W / 2);
+    }
+    addEventListener("resize", () => { if (running) resize(); });
+
+    function reset() {
+      got = new Set(); items = []; floats = []; bugsHit = 0; elapsed = 0; spawnIn = .4;
+      cells.forEach(el => el.classList.remove("got"));
+      player = { x: width / 2, tilt: 0 };
+      hud();
+    }
+    const clock = () => `${Math.floor(elapsed / 60)}:${String(Math.floor(elapsed % 60)).padStart(2, "0")}`;
+    function hud() { $("count").textContent = `${got.size}/${TOTAL}`; $("time").textContent = clock(); }
+    function toast(text) { const el = $("toast"); el.textContent = text; el.classList.add("on"); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove("on"), 900); }
+
+    function spawn() {
+      const speed = 150 + Math.min(110, elapsed * 3.2), x = PIECE / 2 + 8 + Math.random() * (width - PIECE - 16);
+      const flying = new Set(items.filter(it => it.kind === "piece").map(it => it.id));
+      const missing = [...Array(TOTAL).keys()].filter(i => !got.has(i) && !flying.has(i));
+      const bug = (got.size > 0 && Math.random() < .3) || !missing.length;
+      if (bug) items.push({ kind: "bug", x, y: -PIECE, speed: speed * 1.1, spin: Math.random() * 6 });
+      else items.push({ kind: "piece", id: missing[Math.floor(Math.random() * missing.length)], x, y: -PIECE, speed, spin: Math.random() * 6 });
+    }
+
+    function step(dt) {
+      elapsed += dt; spawnIn -= dt;
+      if (spawnIn <= 0) { spawn(); spawnIn = Math.max(.42, .8 - elapsed * .008); }
+      const top = height - BOX_H - 12;
+      for (const it of items) {
+        it.y += it.speed * dt; it.spin += dt * 1.6;
+        const caught = it.y + PIECE / 2 >= top && it.y - PIECE / 2 <= top + BOX_H * .6 && Math.abs(it.x - player.x) < BOX_W / 2 + PIECE * .2;
+        if (caught) {
+          it.dead = true;
+          if (it.kind === "piece") {
+            got.add(it.id); cells[it.id].classList.add("got");
+            floats.push({ x: it.x, y: top - 6, text: "+1", color: INK, life: .7 });
+            beep(660 + got.size * 30, .12, "triangle");
+          } else {
+            bugsHit++;
+            const have = [...got];
+            if (have.length) { const lost = have[Math.floor(Math.random() * have.length)]; got.delete(lost); cells[lost].classList.remove("got"); }
+            floats.push({ x: it.x, y: top - 6, text: "−1", color: TC, life: .8 });
+            field.classList.remove("hit"); void field.offsetWidth; field.classList.add("hit");
+            toast("¡Un bug! Te tumbó un bloque"); beep(170, .28, "sawtooth", .07, .5);
+          }
+          hud();
+        }
+        if (it.y - PIECE > height) it.dead = true;
+      }
+      items = items.filter(it => !it.dead);
+      for (const f of floats) { f.life -= dt; f.y -= 60 * dt; }
+      floats = floats.filter(f => f.life > 0);
+      if (Math.floor(elapsed * 2) !== Math.floor((elapsed - dt) * 2)) hud();
+      if (got.size === TOTAL) finish();
+    }
+
+    function drawBug(x, y, spin) {
+      ctx.save(); ctx.translate(x, y); ctx.rotate(Math.sin(spin) * .25);
+      ctx.strokeStyle = INK; ctx.lineWidth = 3; ctx.lineCap = "round";
+      for (const side of [-1, 1]) for (const dy of [-9, 0, 9]) { ctx.beginPath(); ctx.moveTo(side * 12, dy); ctx.lineTo(side * 23, dy * 1.5 - 1); ctx.stroke(); }
+      for (const side of [-1, 1]) { ctx.beginPath(); ctx.moveTo(side * 5, -16); ctx.lineTo(side * 10, -25); ctx.stroke(); }
+      ctx.fillStyle = TC; ctx.beginPath(); ctx.ellipse(0, 0, 14, 18, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, -8); ctx.lineTo(0, 18); ctx.stroke();
+      ctx.fillStyle = INK; ctx.beginPath(); ctx.ellipse(0, -13, 9, 6, 0, Math.PI, 0); ctx.fill();
+      ctx.restore();
+    }
+    function drawPiece(it) {
+      ctx.save(); ctx.translate(it.x, it.y); ctx.rotate(Math.sin(it.spin) * .18);
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(qr, (it.id % GRID) * slice, Math.floor(it.id / GRID) * slice, slice, slice, -PIECE / 2, -PIECE / 2, PIECE, PIECE);
+      ctx.strokeStyle = INK; ctx.lineWidth = 3; ctx.strokeRect(-PIECE / 2, -PIECE / 2, PIECE, PIECE);
+      ctx.restore();
+    }
+    function drawBox() {
+      ctx.save(); ctx.translate(player.x, height - BOX_H - 12); ctx.rotate(player.tilt);
+      ctx.lineWidth = 3; ctx.strokeStyle = INK; ctx.lineJoin = "round";
+      ctx.fillStyle = ICE;                                   // open flaps
+      for (const side of [-1, 1]) { ctx.beginPath(); ctx.moveTo(side * BOX_W / 2, 0); ctx.lineTo(side * (BOX_W / 2 + 16), -14); ctx.lineTo(side * (BOX_W / 2 - 22), -14); ctx.lineTo(side * (BOX_W / 2 - 34), 0); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+      ctx.fillStyle = WHITE; ctx.fillRect(-BOX_W / 2, 0, BOX_W, BOX_H);
+      ctx.fillStyle = TC; ctx.fillRect(-9, 0, 18, BOX_H);    // ribbon
+      ctx.strokeRect(-BOX_W / 2, 0, BOX_W, BOX_H);
+      ctx.restore();
+    }
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = ICE; ctx.fillRect(0, height - 12, width, 12);
+      for (const it of items) it.kind === "piece" ? drawPiece(it) : drawBug(it.x, it.y, it.spin);
+      drawBox();
+      ctx.font = "800 22px 'Plus Jakarta Sans', sans-serif"; ctx.textAlign = "center";
+      for (const f of floats) { ctx.globalAlpha = Math.min(1, f.life * 2.5); ctx.fillStyle = f.color; ctx.fillText(f.text, f.x, f.y); }
+      ctx.globalAlpha = 1;
+    }
+    function frame(now) {
+      if (!running) return;
+      const dt = Math.min(.05, Math.max(0, (now - last) / 1000)); last = now;
+      player.tilt *= .85;
+      step(dt); draw();
+      if (running) requestAnimationFrame(frame);
+    }
+
+    function play() {
+      $("intro").hidden = true; $("game").hidden = false; $("win").hidden = true; $("winArt").hidden = true; $("winTitle").hidden = true;
+      field.hidden = false; $("how").hidden = false; $("hud").classList.remove("win");
+      resize(); reset();
+      running = true; last = performance.now(); requestAnimationFrame(frame);
+    }
+    function finish() {
+      running = false;
+      [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => beep(f, .25, "triangle"), i * 110));
+      field.hidden = true; $("how").hidden = true;
+      $("hud").classList.add("win"); $("winArt").hidden = false; $("winTitle").hidden = false; $("win").hidden = false;
+      $("winStats").textContent = `Tiempo: ${clock()} · Bugs que te alcanzaron: ${bugsHit}`;
+      $("code").textContent = data.c;
+      if (isUrl(data.c)) { $("open").href = data.c; $("open").hidden = false; $("copy").textContent = "Copiar enlace"; }
+      scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // Controls: finger or mouse anywhere on the field, or the arrow keys.
+    const moveTo = clientX => {
+      const x = Math.min(Math.max(clientX - field.getBoundingClientRect().left, BOX_W / 2), width - BOX_W / 2);
+      player.tilt = Math.max(-.2, Math.min(.2, (x - player.x) * .02)); player.x = x;
+    };
+    field.addEventListener("pointerdown", event => { if (running) moveTo(event.clientX); });
+    field.addEventListener("pointermove", event => { if (running) moveTo(event.clientX); });
+    addEventListener("keydown", event => {
+      if (!running) return;
+      const dir = { ArrowLeft: -1, ArrowRight: 1 }[event.key];
+      if (dir) { event.preventDefault(); moveTo(field.getBoundingClientRect().left + player.x + dir * 34); }
+    });
+
+    $("go").addEventListener("click", () => { try { audio = audio || new (window.AudioContext || window.webkitAudioContext)(); } catch {} play(); });
+    $("again").addEventListener("click", play);
+    $("copy").addEventListener("click", () => copyText(data.c, $("copy")));
+  }
+
+  function startCreator() {
+    $("demo").href = location.origin + location.pathname + "#" + encode({ c: "DEMO-RURAY-2026" });
+  }
+
+  const data = decode(location.hash.slice(1));
+  if (data) { $("intro").hidden = false; startGame(data); } else { document.querySelector("main").classList.add("landing"); $("create").hidden = false; startCreator(); }
+  addEventListener("hashchange", () => location.reload());
+</script>
+</body>
+</html>
