@@ -1,0 +1,14 @@
+# dependencies
+node_modules
+
+# next.js
+.next
+next-env.d.ts
+*.tsbuildinfo
+
+# env files (keep the template)
+.env*
+!.env.example
+
+# vercel
+.vercel
